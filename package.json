@@ -1,0 +1,12 @@
+{
+  "name": "a",
+  "version": "1.0.0",
+  "description": "",
+  "main": "querystring.js",
+  "scripts": {
+    "start": "watch 'node test.js' ./"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "MIT"
+}
