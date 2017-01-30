@@ -321,23 +321,23 @@ function parse(qs, sep, eq, options) {
         if (valEncoded)
           value = decodeStr(value, decode);
 
-        if (lastPos === 0 || lastPos - posIdx > sepLen) {
+        if (lastPos - posIdx > sepLen || key.length > 0 || value.length > 0 || i === 0) {
           // Use a key array lookup instead of using hasOwnProperty(), which is
           // slower
           if (keys.indexOf(key) === -1) {
             obj[key] = value;
             keys[keys.length] = key;
-          } else {
+          } else if (obj[key]) {
             const curValue = obj[key];
-            // A simple Array-specific property check is enough here to
-            // distinguish from a string value and is faster and still safe
-            // since we are generating all of the values being assigned.
-            if (curValue && curValue.pop)
-              curValue[curValue.length] = value;
-            else
-              obj[key] = [curValue, value];
+              // A simple Array-specific property check is enough here to
+              // distinguish from a string value and is faster and still safe
+              // since we are generating all of the values being assigned.
+              if (curValue.pop)
+                curValue[curValue.length] = value;
+              else
+                obj[key] = [curValue, value];
           }
-        } else if (i === 1 && posIdx === 0) {
+        } else if (i === 1) {
           // A pair with repeated sep could be added into obj in the first loop
           // and it should be deleted
           delete obj[key];
