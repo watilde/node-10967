@@ -327,19 +327,17 @@ function parse(qs, sep, eq, options) {
           if (keys.indexOf(key) === -1) {
             obj[key] = value;
             keys[keys.length] = key;
-          } else if (lastPos - sepIdx > sepLen) {
+          } else {
             const curValue = obj[key];
-            if (curValue) {
-              // A simple Array-specific property check is enough here to
-              // distinguish from a string value and is faster and still safe
-              // since we are generating all of the values being assigned.
-              if (curValue.pop)
-                curValue[curValue.length] = value;
-              else
-                obj[key] = [curValue, value];
-            }
+            // A simple Array-specific property check is enough here to
+            // distinguish from a string value and is faster and still safe
+            // since we are generating all of the values being assigned.
+            if (curValue && curValue.pop)
+              curValue[curValue.length] = value;
+            else
+              obj[key] = [curValue, value];
           }
-        } else if (posIdx === 0) {
+        } else if (i === 1 && posIdx === 0) {
           // A pair with repeated sep could be added into obj in the first loop
           // and it should be deleted
           delete obj[key];
